@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useTheme, ThemeProvider } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Container from "@material-ui/core/Container";
+import Card from "./components/Card";
+import theme from "./theme";
+import useAppStyles from "./styles/useAppStyles";
 
-function App() {
+const App = () => {
+  const { breakpoints } = useTheme();
+  const mobile = useMediaQuery(breakpoints.down("xs"));
+  const classes = useAppStyles();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Container
+        component="main"
+        maxWidth="sm"
+        className={classes.container}
+        disableGutters={mobile}
+      >
+        <Card />
+      </Container>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
