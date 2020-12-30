@@ -8,8 +8,8 @@ const Divider = () => {
       mt={3}
       width="100%"
       display="grid"
-      justifyContent="center"
       alignItems="center"
+      justifyContent="center"
       gridTemplateColumns="1fr 2.5rem 1fr"
     >
       <MuiDivider light />

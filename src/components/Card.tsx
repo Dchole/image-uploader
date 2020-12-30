@@ -1,35 +1,38 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import UploadSection from "./UploadSection";
 import useCardStyles from "../styles/useCardStyles";
 import Divider from "./Divider";
+import validFileType from "../lib/validFileTypes";
 
 const Card = () => {
-  const inputRef = useRef<HTMLInputElement | null>(null);
   const classes = useCardStyles();
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [file, setFile] = useState<File | null>(null);
   const [upload, setUpload] = useState<string | ArrayBuffer | null>(null);
 
-  const handleKeyInput = (event: React.KeyboardEvent<HTMLSpanElement>) => {
-    if (event.key === " " || event.key === "Enter") {
-      inputRef?.current?.click();
-    }
-  };
-
   const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    try {
-      const file = event.target.files![0];
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
+    const file = event.target.files![0];
+    validFileType(file) && setFile(file);
+  };
 
-      reader.onloadend = () => {
-        setUpload(reader.result);
-      };
-    } catch (error) {
-      console.log(error);
+  const saveImage = () => {
+    if (file) {
+      try {
+        const reader = new FileReader();
+        reader.readAsDataURL(file as File);
+        reader.onloadend = () => {
+          setUpload(reader.result);
+        };
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
+
+  useEffect(saveImage, [file]);
 
   return (
     <Paper component="section" className={classes.paper}>
@@ -39,7 +42,7 @@ const Card = () => {
       <Typography color="textSecondary">
         File should be Jpeg, Png,...
       </Typography>
-      <UploadSection preview={upload} />
+      <UploadSection setFile={setFile} />
       <Divider />
       <input
         accept="image/png, image/jpeg"
@@ -49,17 +52,14 @@ const Card = () => {
         ref={inputRef}
         onChange={handleUpload}
       />
-      <label htmlFor="upload-image">
-        <Button
-          component="span"
-          color="primary"
-          variant="contained"
-          style={{ marginTop: 21 }}
-          onKeyDown={handleKeyInput}
-        >
-          Choose a file
-        </Button>
-      </label>
+      <Button
+        color="primary"
+        variant="contained"
+        style={{ marginTop: 21 }}
+        onClick={() => inputRef?.current?.click()}
+      >
+        Choose a file
+      </Button>
     </Paper>
   );
 };

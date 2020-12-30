@@ -3,7 +3,7 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import Card from "./components/Card";
-import theme from "./theme";
+import theme from "./lib/theme";
 import useAppStyles from "./styles/useAppStyles";
 
 const App = () => {
