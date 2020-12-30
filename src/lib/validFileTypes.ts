@@ -1,4 +1,4 @@
-const fileTypes = [
+export const fileTypes = [
   "image/apng",
   "image/bmp",
   "image/gif",
